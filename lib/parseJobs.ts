@@ -99,6 +99,19 @@ export function parseJobsFromSerper(
   results.forEach((result) => {
     if (!result.link) return;
 
+    const searchText = `${result.title || ""} ${result.snippet || ""}`.toLowerCase();
+    if (
+      searchText.includes("hybrid") ||
+      searchText.includes("in-office") ||
+      searchText.includes("in office") ||
+      searchText.includes("on-site") ||
+      searchText.includes("on site") ||
+      searchText.includes("in-person") ||
+      searchText.includes("in person")
+    ) {
+      return; 
+    }
+
     const platform = ATS_PLATFORMS.find((p) => result.link.includes(p.domain));
     if (!platform) return; // Drop unrecognized domains
     

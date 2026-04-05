@@ -60,8 +60,8 @@ export async function POST(req: Request) {
     
     for (const platform of ATS_PLATFORMS) {
       for (const role of ROLES) {
-        // Enforce the 'remote' keyword globally for all role queries
-        const q = `site:${platform.domain} "${role}" remote`;
+        // Enforce the 'remote' keyword globally and exclude 'hybrid', 'in-office', 'on-site', and 'in-person'
+        const q = `site:${platform.domain} "${role}" remote -hybrid -"in-office" -"on-site" -"in-person"`;
         // Use an async thunk so we can execute them in batches
         queries.push(() => fetchQuery(apiKey, q, 1));
       }
