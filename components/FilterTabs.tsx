@@ -12,6 +12,7 @@ const TABS: { id: FilterTab; label: string }[] = [
   { id: "all", label: "All Roles" },
   { id: "data analyst", label: "Data Analyst" },
   { id: "technical program manager", label: "TPM" },
+  { id: "program manager", label: "Program Manager" },
   { id: "business analyst", label: "Business Analyst" },
   { id: "data engineer", label: "Data Engineer" },
   { id: "product manager", label: "Product Manager" },

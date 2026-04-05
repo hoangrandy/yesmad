@@ -10,6 +10,10 @@ const ROLE_PATTERNS: { role: RoleType; patterns: string[] }[] = [
     patterns: ["technical program manager", "tpm"],
   },
   {
+    role: "program manager",
+    patterns: ["program manager"],
+  },
+  {
     role: "business analyst",
     patterns: ["business analyst"],
   },
@@ -23,7 +27,7 @@ const ROLE_PATTERNS: { role: RoleType; patterns: string[] }[] = [
   },
   {
     role: "grants manager",
-    patterns: ["grants manager", "grants", "corporate social responsibility", "csr", "foundation"],
+    patterns: ["grants manager", "grants officer", "grants", "corporate social responsibility", "csr", "foundation"],
   },
 ];
 

@@ -1,6 +1,7 @@
 export type RoleType =
   | "data analyst"
   | "technical program manager"
+  | "program manager"
   | "business analyst"
   | "data engineer"
   | "product manager"
@@ -45,6 +46,7 @@ export type FilterTab =
   | "all"
   | "data analyst"
   | "technical program manager"
+  | "program manager"
   | "business analyst"
   | "data engineer"
   | "product manager"

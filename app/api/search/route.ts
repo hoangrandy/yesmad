@@ -11,7 +11,9 @@ const ROLES = [
   "data engineer",
   "product manager",
   "product management",
+  "program manager",
   "grants manager",
+  "grants officer",
   "corporate social responsibility",
   "foundation",
 ];

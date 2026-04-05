@@ -34,6 +34,7 @@ const FILTER_LABELS: Record<FilterTab, string> = {
   all: "All Roles",
   "data analyst": "Data Analyst",
   "technical program manager": "TPM",
+  "program manager": "Program Manager",
   "business analyst": "Business Analyst",
   "data engineer": "Data Engineer",
   "product manager": "Product Manager",
@@ -277,6 +278,7 @@ export default function HomePage() {
     "technical program manager": networkFilteredJobs.filter(
       (j) => j.role_type === "technical program manager" && !appliedMap[j.id]
     ).length,
+    "program manager": networkFilteredJobs.filter((j) => j.role_type === "program manager" && !appliedMap[j.id]).length,
     "business analyst": networkFilteredJobs.filter(
       (j) => j.role_type === "business analyst" && !appliedMap[j.id]
     ).length,

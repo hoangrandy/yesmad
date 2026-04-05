@@ -15,6 +15,7 @@ interface JobCardProps {
 const ROLE_COLORS: Record<RoleType, string> = {
   "data analyst": "tag--blue",
   "technical program manager": "tag--purple",
+  "program manager": "tag--purple",
   "business analyst": "tag--orange",
   "data engineer": "tag--teal",
   "product manager": "tag--blue", // Assuming blue or create new CSS class if needed
@@ -24,6 +25,7 @@ const ROLE_COLORS: Record<RoleType, string> = {
 const ROLE_LABELS: Record<RoleType, string> = {
   "data analyst": "Data Analyst",
   "technical program manager": "TPM",
+  "program manager": "Program Manager",
   "business analyst": "Biz Analyst",
   "data engineer": "Data Engineer",
   "product manager": "Product Manager",
