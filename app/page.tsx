@@ -193,12 +193,12 @@ export default function HomePage() {
       "Title",
       "Company",
       "Role Type",
+      "ATS Platform",
       "Date Posted",
       "Applied",
       "Applied Date",
       "Notes",
       "URL",
-      "ATS Platform",
     ];
 
     const generateRows = (jobList: Job[]) => {
@@ -206,13 +206,22 @@ export default function HomePage() {
         job.title,
         job.company,
         job.role_type,
+        job.atsName || "Unknown",
         job.date_posted || "",
         appliedMap[job.id] ? "Yes" : "No",
         appliedDatesMap[job.id] || "",
         (notesMap[job.id] || "").replace(/\n/g, " "),
         job.url,
-        job.atsName || "Unknown",
       ]);
+    };
+
+    const addHyperlinks = (ws: any, rowCount: number) => {
+      for (let r = 1; r < rowCount; r++) {
+        const cellAddress = XLSX.utils.encode_cell({ r, c: 8 }); // Column I
+        if (ws[cellAddress]) {
+          ws[cellAddress].l = { Target: ws[cellAddress].v };
+        }
+      }
     };
 
     const wb = XLSX.utils.book_new();
@@ -220,17 +229,19 @@ export default function HomePage() {
     // Sheet 1: All Jobs
     const allRows = [header, ...generateRows(jobs)];
     const wsAll = XLSX.utils.aoa_to_sheet(allRows);
+    addHyperlinks(wsAll, allRows.length);
     XLSX.utils.book_append_sheet(wb, wsAll, "All Jobs");
 
-    // Separate sheets by ATS
-    const atsPlatforms = Array.from(new Set(jobs.map((j) => j.atsName || "Unknown")));
-    for (const ats of atsPlatforms) {
-      const atsJobs = jobs.filter((j) => (j.atsName || "Unknown") === ats);
-      if (atsJobs.length > 0) {
-        const atsRows = [header, ...generateRows(atsJobs)];
-        const wsAts = XLSX.utils.aoa_to_sheet(atsRows);
-        const sheetName = ats.substring(0, 31).replace(/[\\/*?:\[\]]/g, "");
-        XLSX.utils.book_append_sheet(wb, wsAts, sheetName);
+    // Separate sheets by Position (Role Type)
+    const positions = Array.from(new Set(jobs.map((j) => j.role_type || "Unknown")));
+    for (const pos of positions) {
+      const posJobs = jobs.filter((j) => (j.role_type || "Unknown") === pos);
+      if (posJobs.length > 0) {
+        const posRows = [header, ...generateRows(posJobs)];
+        const wsPos = XLSX.utils.aoa_to_sheet(posRows);
+        addHyperlinks(wsPos, posRows.length);
+        const sheetName = pos.substring(0, 31).replace(/[\\/*?:\[\]]/g, "");
+        XLSX.utils.book_append_sheet(wb, wsPos, sheetName);
       }
     }
 
