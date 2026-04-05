@@ -48,34 +48,33 @@ function sortJobs(
   applied: AppliedMap
 ): Job[] {
   const copy = [...jobs];
-  switch (sort) {
-    case "company_asc":
-      return copy.sort((a, b) => a.company.localeCompare(b.company));
-    case "company_desc":
-      return copy.sort((a, b) => b.company.localeCompare(a.company));
-    case "title_asc":
-      return copy.sort((a, b) => a.title.localeCompare(b.title));
-    case "role_type":
-      return copy.sort((a, b) => a.role_type.localeCompare(b.role_type));
-    case "applied_first":
-      return copy.sort((a, b) => {
+  return copy.sort((a, b) => {
+    // Unconditionally pin new jobs to the top
+    if (a.isNew && !b.isNew) return -1;
+    if (!a.isNew && b.isNew) return 1;
+
+    switch (sort) {
+      case "company_asc":
+        return a.company.localeCompare(b.company);
+      case "company_desc":
+        return b.company.localeCompare(a.company);
+      case "title_asc":
+        return a.title.localeCompare(b.title);
+      case "role_type":
+        return a.role_type.localeCompare(b.role_type);
+      case "applied_first": {
         const aA = applied[a.id] ? 1 : 0;
         const bA = applied[b.id] ? 1 : 0;
         return bA - aA;
-      });
-    case "newest_first":
-      return copy.sort(
-        (a, b) =>
-          new Date(b.fetchedAt).getTime() - new Date(a.fetchedAt).getTime()
-      );
-    case "oldest_first":
-      return copy.sort(
-        (a, b) =>
-          new Date(a.fetchedAt).getTime() - new Date(b.fetchedAt).getTime()
-      );
-    default:
-      return copy;
-  }
+      }
+      case "newest_first":
+        return new Date(b.fetchedAt).getTime() - new Date(a.fetchedAt).getTime();
+      case "oldest_first":
+        return new Date(a.fetchedAt).getTime() - new Date(b.fetchedAt).getTime();
+      default:
+        return 0;
+    }
+  });
 }
 
 function filterJobs(
@@ -129,9 +128,15 @@ export default function HomePage() {
       
       const freshJobs: Job[] = data.jobs;
       const freshJobIds = new Set(freshJobs.map((j) => j.id));
+      const previousJobIds = new Set(jobs.map((j) => j.id));
       
       const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000;
       const nowMs = new Date().getTime();
+
+      const processedFreshJobs = freshJobs.map(j => ({
+        ...j,
+        isNew: !previousJobIds.has(j.id)
+      }));
 
       // Accumulation: Preserve previously fetched jobs, prune if > 14 days old and not applied
       const retainedJobs = jobs.filter((j) => {
@@ -139,9 +144,9 @@ export default function HomePage() {
          if (appliedMap[j.id]) return true; // Never prune applied jobs
          const fetchMs = new Date(j.fetchedAt).getTime();
          return (nowMs - fetchMs) < FOURTEEN_DAYS_MS;
-      });
+      }).map(j => ({ ...j, isNew: false })); // Remove "new" flag from jobs seen in a previous search
       
-      const newJobs = [...freshJobs, ...retainedJobs];
+      const newJobs = [...processedFreshJobs, ...retainedJobs];
       
       setJobsState(newJobs);
       setJobs(newJobs);

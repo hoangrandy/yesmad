@@ -457,6 +457,16 @@ body {
   );
 }
 
+.job-card--new {
+  border-left-color: #fbbf24;
+  background: linear-gradient(
+    to right,
+    rgba(251, 191, 36, 0.08) 0%,
+    var(--bg-card) 80px
+  );
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.15), var(--shadow-card);
+}
+
 .job-card-main {
   display: flex;
   align-items: flex-start;
@@ -571,6 +581,18 @@ body {
   background: rgba(34, 197, 94, 0.15);
   color: var(--green);
   border-color: rgba(34, 197, 94, 0.3);
+}
+
+.tag--new {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.3);
+  animation: pulseNew 2s infinite;
+}
+
+@keyframes pulseNew {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 
 /* ─── Card Actions ─── */

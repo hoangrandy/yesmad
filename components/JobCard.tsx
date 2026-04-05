@@ -75,7 +75,7 @@ export default function JobCard({
 
   return (
     <article
-      className={`job-card ${isApplied ? "job-card--applied" : ""}`}
+      className={`job-card ${isApplied ? "job-card--applied" : ""} ${job.isNew ? "job-card--new" : ""}`}
       id={`job-${job.id}`}
       aria-label={`${job.title} at ${job.company}`}
     >
@@ -127,6 +127,7 @@ export default function JobCard({
             {formatDate(job.date_posted, job.fetchedAt)}
           </div>
           <div className="job-tags">
+            {job.isNew && <span className="tag tag--new">✨ New</span>}
             <span className={`tag ${ROLE_COLORS[job.role_type]}`}>
               {ROLE_LABELS[job.role_type]}
             </span>

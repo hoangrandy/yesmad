@@ -16,6 +16,7 @@ export interface Job {
   date_posted: string | null;
   fetchedAt: string;
   atsName: string;
+  isNew?: boolean;
 }
 
 export const ATS_PLATFORMS = [
